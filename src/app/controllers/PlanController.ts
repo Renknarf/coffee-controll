@@ -1,84 +1,70 @@
 import { Request, Response } from "express";
-import { validate } from "class-validator";
 
-import { PlanRepository } from "../repositories/PlanRepository";
+import { planService } from "../services/planService";
 
 const getAll = async (req: Request, res: Response) => {
-  const plans = await PlanRepository.getAll();
-  res.status(200).json(plans);
+  try {
+    const plans = await planService.getAll();
+    res.status(200).json(plans);
+  } catch (error: any) {
+    res.status(400).json({ error: true, message: error?.message });
+  }
 };
 
 const getById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
   try {
-    const plan = await PlanRepository.getById(id);
-
-    if (plan) {
-      res.json(plan);
-    } else {
+    const { id } = req.params;
+    const plan = await planService.getById(id);
+    if (!plan) {
       res.status(404).json({ message: "Plano não encontrado." });
+    } else {
+      res.status(200).json(plan);
     }
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Erro ao obter o plano.", error: error.message });
+    res.status(400).json({ error: true, message: error?.message });
   }
 };
 
 const update = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const updatedData: PlanDTO = req.body;
-
   try {
-    const updatedPlan = await PlanRepository.update(id, updatedData);
+    const { id } = req.params;
+    const planData = req.body;
 
-    if (updatedPlan) {
-      res.json({ message: "Plano atualizado com sucesso.", updatedPlan });
-    } else {
+    const updatePlan = await planService.update(id, planData);
+
+    if (!updatePlan) {
       res.status(404).json({ message: "Plano não encontrado." });
+    } else {
+      res.status(200).json(updatePlan);
     }
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Erro ao atualizar o plano.", error: error.message });
+    res.status(400).json({ error: true, message: error?.message });
   }
 };
 
 const create = async (req: Request, res: Response) => {
-  const planData: PlanDTO = req.body;
-
-  const errors = await validate(planData);
-
-  if (errors.length > 0) {
-    return res.status(400).json({ message: "Erro de validação", errors });
-  }
-
   try {
-    const createdPlan = await PlanRepository.create(planData);
+    const planData = req.body;
+    const createdPlan = await planService.create(planData);
     res.status(201).json(createdPlan);
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Erro ao criar o plano.", error: error.message });
+    res.status(400).json({ error: true, message: error?.message });
   }
 };
 
 const deleteById = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
   try {
-    const deleted = await PlanRepository.deleteById(id);
+    const { id } = req.params;
 
-    if (deleted) {
-      res.json({ message: "Plano excluído com sucesso." });
-    } else {
+    const planDelete = await planService.deleteById(id);
+
+    if (!planDelete) {
       res.status(404).json({ message: "Plano não encontrado." });
+    } else {
+      res.status(200).json({ message: "Plano excluído com sucesso." });
     }
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Erro ao excluir o plano.", error: error.message });
+    res.status(400).json({ error: true, message: error?.message });
   }
 };
 

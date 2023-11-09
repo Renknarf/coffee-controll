@@ -3,8 +3,10 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
-import { PlanRouter } from "./routers/PlanRouter";
+
+import { planRouter } from "./routers/planRouter";
 import { myDataSource } from "../database/data-source";
+import { signatureRouter } from "./routers/signatureRouter";
 
 // establish database connection
 myDataSource
@@ -26,12 +28,6 @@ app.use(helmet());
 
 app.use(express.json());
 
-app.use("/plans/", PlanRouter);
+app.use("/plans/", planRouter);
 
-// app.use((req: Request, res: Response, next: NextFunction) => {
-//   res.send("Hello World");
-// });
-
-// app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-//   res.status(500).send(error.message);
-// });
+app.use("/signature/", signatureRouter);
