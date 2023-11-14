@@ -34,10 +34,16 @@ const update = async (id: string, signatureData: Partial<Signature>) => {
   }
 };
 
-const create = async (signatureData: Partial<Signature>) => {
+const create = async ( req: Request, res: Response, signatureData: Partial<Signature>) => {
   try {
-    await bodyValidation.validate(signatureData);
-    return await SignatureRepository.create(signatureData);
+    const { id } = req.params;
+    const plan = await planService.getById(id);
+    if (!plan) {
+      res.status(404).json({ message: "Erro ao criar assinatura - Plano é pré-requisito para assinatura." });
+    } else {
+      await bodyValidation.validate(signatureData);
+      return await SignatureRepository.create(signatureData);
+    }    
   } catch (error: any) {
     throw new Error(error?.message || "Erro ao criar assinatura.");
   }
