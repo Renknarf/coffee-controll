@@ -1,5 +1,3 @@
-//Refatorar
-
 import { Request, Response } from "express";
 
 import { planService } from "../services/planService";
