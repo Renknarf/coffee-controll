@@ -12,7 +12,7 @@ export class Signature {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @ManyToOne(() => Plan))
+  @ManyToOne(() => Plan, id_plan => plan.signature))
   id_plan: string;
 
   @Column()
