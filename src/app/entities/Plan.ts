@@ -6,6 +6,10 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import {
+  Signature
+} from './Signature';
+
 @Entity()
 export class Plan {
   @PrimaryGeneratedColumn("uuid")
@@ -25,6 +29,9 @@ export class Plan {
 
   @CreateDateColumn()
   created_at: Date;
+
+  @OneToMany(() => Signature, signature => signature.plan)
+  signatures: Signature[];
 
   @UpdateDateColumn()
   updated_at: Date;
