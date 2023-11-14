@@ -8,3 +8,4 @@ Acadêmicos : Frankner da Silva Soares, Marcus Vinicius Borges Gajozo
 
 
 07/11/2023 - 1ª Entrega de web service simples para Assinatura ou Financeiro
+14/11/2023 - 2ª Entrega de web service melhorado com foco em operações do negócio
