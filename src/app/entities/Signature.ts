@@ -4,6 +4,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from "typeorm";
 
 @Entity()
@@ -11,7 +12,7 @@ export class Signature {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @ManyToOne(() => Plan))
   id_plan: string;
 
   @Column()
